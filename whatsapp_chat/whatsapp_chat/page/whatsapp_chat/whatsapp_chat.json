@@ -1,0 +1,35 @@
+{
+ "content": null,
+ "creation": "2026-03-06 16:05:02.776179",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2026-03-09 20:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "WhatsApp Chat",
+ "name": "whatsapp-chat",
+ "owner": "Administrator",
+ "page_name": "whatsapp-chat",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Sales User"
+  },
+  {
+   "role": "Sales Manager"
+  },
+  {
+   "role": "AI Chatbot"
+  },
+  {
+   "role": "WhatsApp Chatbot"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "WhatsApp Chat"
+}

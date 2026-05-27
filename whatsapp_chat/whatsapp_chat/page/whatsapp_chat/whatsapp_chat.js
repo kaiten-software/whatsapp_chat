@@ -28,6 +28,8 @@ class WhatsAppChat {
         this.last_customer_message_time = null;
         this.csw_filter = "all"; // 'all', 'open', 'closed', 'favorites'
         this.tag_filter = null; // null or tag string
+        this._tag_filter_data = null;
+        this._messages_signature = null;
 
         this.make();
     }
@@ -83,6 +85,17 @@ class WhatsAppChat {
                         <button class="wa-filter-btn" data-filter="unread">Unread</button>
                         <button class="wa-filter-btn" data-filter="open">🪟 Open</button>
                         <button class="wa-filter-btn" data-filter="closed">🚪 Closed</button>
+                        <button class="wa-filter-btn wa-tag-filter-open" type="button" title="Filter contacts by tag">🏷 Tags</button>
+                    </div>
+                    <div class="wa-tag-filter-dropdown" style="display:none;">
+                        <div class="wa-tag-filter-dropdown-header">
+                            <span class="wa-tag-filter-dropdown-title">Filter by tag</span>
+                            <button class="wa-tag-filter-dropdown-close" type="button" aria-label="Close">✕</button>
+                        </div>
+                        <div class="wa-tag-filter-search-wrap">
+                            <input class="wa-tag-filter-search" placeholder="Search tags..." />
+                        </div>
+                        <div class="wa-tag-filter-options"></div>
                     </div>
                     <div class="wa-tag-filter-bar" style="display:none;">
                         <span class="wa-tag-filter-label">Filtering by tag:</span>
@@ -131,7 +144,27 @@ class WhatsAppChat {
         this.$container.find(".wa-tag-filter-clear").on("click", () => {
             this.tag_filter = null;
             this.$container.find(".wa-tag-filter-bar").hide();
+            this.$container.find(".wa-tag-filter-open").removeClass("active");
             this.render_leads();
+        });
+
+        this.$container.find(".wa-tag-filter-open").on("click", (e) => {
+            e.stopPropagation();
+            this.open_tag_filter_dropdown();
+        });
+
+        this.$container.find(".wa-tag-filter-dropdown-close").on("click", () => {
+            this.close_tag_filter_dropdown();
+        });
+
+        this.$container.find(".wa-tag-filter-search").on("input", (e) => {
+            this.filter_tag_filter_options(e.target.value);
+        });
+
+        $(document).on("click.wa-tag-filter", (e) => {
+            if (!$(e.target).closest(".wa-tag-filter-open, .wa-tag-filter-dropdown").length) {
+                this.close_tag_filter_dropdown();
+            }
         });
     }
 
@@ -173,6 +206,12 @@ class WhatsAppChat {
             filtered = filtered.filter((l) =>
                 (l.tags || []).includes(this.tag_filter)
             );
+        }
+
+        if (this.tag_filter) {
+            this.$container.find(".wa-tag-filter-open").addClass("active");
+        } else {
+            this.$container.find(".wa-tag-filter-open").removeClass("active");
         }
 
         if (!filtered.length) {
@@ -274,14 +313,109 @@ class WhatsAppChat {
             this.tag_filter = tag;
             this.$container.find(".wa-tag-filter-bar").show();
             this.$container.find(".wa-tag-filter-value").text(tag);
+            this.$container.find(".wa-tag-filter-open").addClass("active");
             this.render_leads();
         });
+    }
+
+    load_tag_filter_data() {
+        if (this._tag_filter_data) {
+            return Promise.resolve(this._tag_filter_data);
+        }
+
+        return new Promise((resolve) => {
+            frappe.call({
+                method: "whatsapp_chat.api.get_all_lead_tags",
+                callback: (r) => {
+                    this._tag_filter_data = r.message || { tags: [], prebuilt: [] };
+                    resolve(this._tag_filter_data);
+                },
+            });
+        });
+    }
+
+    open_tag_filter_dropdown() {
+        const $dropdown = this.$container.find(".wa-tag-filter-dropdown");
+        $dropdown.show();
+        this.$container.find(".wa-tag-filter-open").addClass("active");
+
+        this.load_tag_filter_data().then((data) => {
+            this.render_tag_filter_options((data && data.tags) || []);
+            this.filter_tag_filter_options(this.$container.find(".wa-tag-filter-search").val() || "");
+            this.$container.find(".wa-tag-filter-search").focus();
+        });
+    }
+
+    close_tag_filter_dropdown() {
+        this.$container.find(".wa-tag-filter-dropdown").hide();
+        if (!this.tag_filter) {
+            this.$container.find(".wa-tag-filter-open").removeClass("active");
+        }
+    }
+
+    render_tag_filter_options(tags) {
+        const $list = this.$container.find(".wa-tag-filter-options");
+        const current = this.tag_filter;
+        const rows = [];
+
+        rows.push(`
+            <div class="wa-tag-filter-option ${!current ? 'active' : ''}" data-tag="">
+                <span>All leads</span>
+                ${!current ? '<span class="wa-tag-filter-option-check">✓</span>' : ''}
+            </div>
+        `);
+
+        if (!tags.length) {
+            rows.push('<div class="wa-tag-filter-empty">No tags available yet.</div>');
+        } else {
+            rows.push(tags.map((tag) => {
+                const is_active = current === tag;
+                return `
+                    <div class="wa-tag-filter-option ${is_active ? 'active' : ''}" data-tag="${this.escape(tag)}">
+                        <span class="wa-tag-filter-option-label">${this.escape(tag)}</span>
+                        ${is_active ? '<span class="wa-tag-filter-option-check">✓</span>' : ''}
+                    </div>
+                `;
+            }).join(""));
+        }
+
+        $list.html(rows.join(""));
+
+        $list.find(".wa-tag-filter-option").on("click", (e) => {
+            const tag = $(e.currentTarget).data("tag") || "";
+            this.apply_tag_filter(tag);
+        });
+    }
+
+    filter_tag_filter_options(query) {
+        const data = this._tag_filter_data || { tags: [] };
+        const q = (query || "").trim().toLowerCase();
+        const filtered = q
+            ? (data.tags || []).filter((tag) => tag.toLowerCase().includes(q))
+            : (data.tags || []);
+        this.render_tag_filter_options(filtered);
+    }
+
+    apply_tag_filter(tag) {
+        this.tag_filter = tag || null;
+        const $bar = this.$container.find(".wa-tag-filter-bar");
+        if (this.tag_filter) {
+            $bar.show();
+            this.$container.find(".wa-tag-filter-value").text(this.tag_filter);
+            this.$container.find(".wa-tag-filter-open").addClass("active");
+        } else {
+            $bar.hide();
+            this.$container.find(".wa-tag-filter-open").removeClass("active");
+        }
+        this.close_tag_filter_dropdown();
+        this.render_leads();
     }
 
     /* ─────────────────────── Select Lead ──────────────────────── */
 
     select_lead(lead_name) {
         this.current_lead = lead_name;
+        this._messages_signature = null;
         const lead = this.leads.find((l) => l.name === lead_name) || {};
 
         // Highlight active contact
@@ -585,7 +719,22 @@ class WhatsAppChat {
                 const data = r.message || {};
                 const messages = data.messages || [];
                 this.last_customer_message_time = data.last_customer_message_time || null;
-                this.render_messages(messages);
+                const signature = JSON.stringify(
+                    messages.map((m) => [
+                        m.name,
+                        m.message,
+                        m.attachment,
+                        m.status,
+                        m.message_origin_time,
+                        m.delivered_at,
+                        m.client_read_at,
+                    ])
+                );
+
+                if (signature !== this._messages_signature) {
+                    this._messages_signature = signature;
+                    this.render_messages(messages);
+                }
                 this.update_session_window();
             },
         });
@@ -603,6 +752,8 @@ class WhatsAppChat {
 
         let html = "";
         let last_date = "";
+        const image_re = /\.(jpg|jpeg|png|gif|webp|bmp|svg|avif|heic|heif)$/i;
+        const video_re = /\.(mp4|mov|webm|ogg|m4v|3gp)$/i;
 
         for (const msg of messages) {
             // Date separator
@@ -629,18 +780,61 @@ class WhatsAppChat {
                 sender = '<div class="wa-message-sender">👤 You</div>';
             }
 
+            const message_text = (msg.message || "").trim();
+            const attachment = (msg.attachment || "").trim();
+            let body_html = "";
+
+            if (attachment) {
+                const clean_attachment = attachment.split("?")[0].toLowerCase();
+                const safe_attachment = this.escape(attachment);
+
+                if (image_re.test(clean_attachment)) {
+                    body_html += `
+                        <a class="wa-attachment-thumb-link" href="${safe_attachment}" target="_blank" rel="noopener noreferrer">
+                            <img class="wa-attachment-thumb" src="${safe_attachment}" alt="Attachment image" loading="lazy" />
+                        </a>`;
+                } else if (video_re.test(clean_attachment)) {
+                    body_html += `
+                        <a class="wa-attachment-thumb-link wa-attachment-video-link" href="${safe_attachment}" target="_blank" rel="noopener noreferrer">
+                            <video class="wa-attachment-thumb wa-attachment-video" src="${safe_attachment}" muted playsinline preload="metadata"></video>
+                            <span class="wa-attachment-play">▶</span>
+                        </a>`;
+                } else {
+                    const file_name = this.escape(attachment.split("/").pop() || "Attachment");
+                    body_html += `<a class="wa-attachment-file" href="${safe_attachment}" target="_blank" rel="noopener noreferrer">📎 ${file_name}</a>`;
+                }
+            }
+
+            if (message_text) {
+                body_html += `<div class="wa-message-caption">${this.escape(message_text)}</div>`;
+            }
+
+            if (!body_html) {
+                body_html = this.escape(msg.message || "");
+            }
+
             html += `
                 <div class="wa-message ${bubble_class}">
                     ${sender}
-                    <div class="wa-message-text">${this.escape(msg.message || "")}<span class="wa-message-meta">
+                    <div class="wa-message-text">${body_html}<span class="wa-message-meta">
                             <span class="wa-message-time">${time}</span>
                             ${status_icon}
                         </span></div>
                 </div>`;
         }
 
+        const msg_el = this.$messages && this.$messages.length ? this.$messages[0] : null;
+        const was_near_bottom = !msg_el
+            || (msg_el.scrollHeight - msg_el.scrollTop - msg_el.clientHeight) < 80;
+
         this.$messages.html(html);
-        this.scroll_to_bottom();
+
+        if (was_near_bottom) {
+            this.scroll_to_bottom();
+            this.$messages
+                .find("img.wa-attachment-thumb, video.wa-attachment-video")
+                .on("load loadedmetadata", () => this.scroll_to_bottom());
+        }
     }
 
     update_session_window() {
@@ -804,6 +998,7 @@ class WhatsAppChat {
         if (!this.current_lead) return;
 
         const lead = this.leads.find((l) => l.name === this.current_lead) || {};
+        const first_name = ((lead.lead_name || "").trim().split(/\s+/)[0] || "").trim();
 
         frappe.call({
             method: "whatsapp_chat.api.get_templates",
@@ -848,16 +1043,10 @@ class WhatsAppChat {
                             depends_on: "eval:doc.template",
                         },
                         {
-                            fieldname: "var_1",
+                            fieldname: "var_name",
                             fieldtype: "Data",
-                            label: "{{1}} — Name",
-                            default: lead.lead_name || "",
-                        },
-                        {
-                            fieldname: "var_2",
-                            fieldtype: "Data",
-                            label: "{{2}} — Media URL",
-                            default: "introduction.png",
+                            label: "{{name}} — Name",
+                            default: first_name || lead.lead_name || "",
                         },
                     ],
                     primary_action_label: "Send Template",
@@ -869,8 +1058,10 @@ class WhatsAppChat {
 
                         // Build variables from fields
                         const vars = {};
-                        if (values.var_1) vars["1"] = values.var_1;
-                        if (values.var_2) vars["2"] = values.var_2;
+                        if (values.var_name) {
+                            vars["name"] = values.var_name;
+                            vars["1"] = values.var_name; // backward compatibility
+                        }
 
                         d.hide();
 
@@ -898,19 +1089,30 @@ class WhatsAppChat {
                 });
 
                 // Update preview when template is selected
+                const apply_template_vars = (body, name_val) => {
+                    let out = body || "";
+                    const esc_re = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+                    const pairs = {
+                        name: name_val,
+                        1: name_val,
+                    };
+                    for (const [k, v] of Object.entries(pairs)) {
+                        if (!v) continue;
+                        const pattern = new RegExp(`{{\\s*${esc_re(k)}\\s*}}`, "g");
+                        out = out.replace(pattern, v);
+                    }
+                    return out;
+                };
+
                 d.fields_dict.template.$input.on("change", () => {
                     const val = d.get_value("template");
                     const t = templates.find(
                         (t) => t.template_name === val
                     );
                     if (t) {
-                        let body = t.body || "(No body preview)";
-                        // Show what the populated template will look like
-                        const v1 = d.get_value("var_1");
-                        const v2 = d.get_value("var_2");
-                        let populated = body;
-                        if (v1) populated = populated.replace("{{1}}", v1);
-                        if (v2) populated = populated.replace("{{2}}", v2);
+                        const body = t.body || "(No body preview)";
+                        const v_name = d.get_value("var_name");
+                        const populated = apply_template_vars(body, v_name);
                         d.set_value("preview", populated);
                     } else {
                         d.set_value("preview", "");
@@ -918,17 +1120,17 @@ class WhatsAppChat {
                 });
 
                 // Also refresh preview when variables change
-                for (const f of ["var_1", "var_2"]) {
+                for (const f of ["var_name"]) {
                     d.fields_dict[f].$input.on("input", () => {
                         const val = d.get_value("template");
                         const t = templates.find((t) => t.template_name === val);
                         if (t) {
-                            let body = t.body || "";
-                            const v1 = d.get_value("var_1");
-                            const v2 = d.get_value("var_2");
-                            if (v1) body = body.replace("{{1}}", v1);
-                            if (v2) body = body.replace("{{2}}", v2);
-                            d.set_value("preview", body);
+                            const body = t.body || "";
+                            const v_name = d.get_value("var_name");
+                            const populated = apply_template_vars(body, v_name);
+                            d.set_value("preview", populated);
+                        } else {
+                            d.set_value("preview", "");
                         }
                     });
                 }

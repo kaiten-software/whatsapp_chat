@@ -1,7 +1,7 @@
 {
  "app": "whatsapp_chat",
  "charts": [],
- "content": "[{\"id\": \"wa_header_1\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>WhatsApp Chat</b></span>\", \"col\": 12}}, {\"id\": \"wa_shortcut_1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"WhatsApp Chat\", \"col\": 4}}, {\"id\": \"wa_shortcut_2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"WhatsApp Settings\", \"col\": 4}}, {\"id\": \"wa_shortcut_3\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"WhatsApp Template\", \"col\": 4}}, {\"id\": \"wa_spacer_1\", \"type\": \"spacer\", \"data\": {\"col\": 12}}]",
+ "content": "[{\"id\": \"wa_header_1\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>WhatsApp Chat</b></span>\", \"col\": 12}}, {\"id\": \"wa_shortcut_1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"WhatsApp Chat\", \"col\": 12}}, {\"id\": \"wa_spacer_1\", \"type\": \"spacer\", \"data\": {\"col\": 12}}]",
  "creation": "2026-03-07 15:25:12.856850",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "indicator_color": "green",
  "is_hidden": 0,
  "label": "WhatsApp",
- "link_type": "DocType",
+ "link_type": "Page",
  "links": [
   {
    "hidden": 0,
@@ -24,29 +24,9 @@
    "link_type": "Page",
    "onboard": 1,
    "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "WhatsApp Settings",
-   "link_count": 0,
-   "link_to": "WhatsApp Settings",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "WhatsApp Template",
-   "link_count": 0,
-   "link_to": "WhatsApp Template",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
   }
  ],
- "modified": "2026-03-07 15:25:12.856850",
+ "modified": "2026-04-21 01:22:19.494598",
  "modified_by": "Administrator",
  "module": "WhatsApp Chat",
  "name": "WhatsApp",
@@ -61,16 +41,7 @@
    "role": "System Manager"
   },
   {
-   "role": "AI Chatbot"
-  },
-  {
    "role": "WhatsApp Chatbot"
-  },
-  {
-   "role": "Sales User"
-  },
-  {
-   "role": "Sales Manager"
   }
  ],
  "sequence_id": 23.0,
@@ -81,20 +52,6 @@
    "label": "WhatsApp Chat",
    "link_to": "whatsapp-chat",
    "type": "Page"
-  },
-  {
-   "color": "#f5cd47",
-   "doc_view": "",
-   "label": "WhatsApp Settings",
-   "link_to": "WhatsApp Settings",
-   "type": "DocType"
-  },
-  {
-   "color": "#579dff",
-   "doc_view": "",
-   "label": "WhatsApp Template",
-   "link_to": "WhatsApp Template",
-   "type": "DocType"
   }
  ],
  "title": "WhatsApp",

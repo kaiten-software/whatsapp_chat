@@ -28,7 +28,7 @@ website_route_rules = []
 fixtures = [
     {
         "doctype": "DocType",
-        "filters": [["name", "in", ["WhatsApp Template", "WhatsApp Settings"]]],
+        "filters": [["name", "in", ["WhatsApp Template", "WhatsApp Settings", "Lead Message Log"]]],
     },
     {
         "doctype": "Page",

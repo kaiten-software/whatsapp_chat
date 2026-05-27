@@ -135,6 +135,110 @@
     font-weight: 600;
 }
 
+.wa-filter-btn.wa-tag-filter-open.active {
+    background: rgba(0, 168, 132, 0.22);
+    color: #00a884;
+}
+
+.wa-tag-filter-dropdown {
+    margin: 0 12px 8px;
+    background: #111b21;
+    border: 1px solid #2a3942;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+}
+
+.wa-tag-filter-dropdown-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border-bottom: 1px solid #2a3942;
+    background: #1a2228;
+}
+
+.wa-tag-filter-dropdown-title {
+    color: #d1d7db;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    text-transform: uppercase;
+}
+
+.wa-tag-filter-dropdown-close {
+    border: none;
+    background: none;
+    color: #8696a0;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0 2px;
+}
+
+.wa-tag-filter-dropdown-close:hover {
+    color: #ea4335;
+}
+
+.wa-tag-filter-search-wrap {
+    padding: 10px 12px;
+    border-bottom: 1px solid #2a3942;
+}
+
+.wa-tag-filter-search {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid #2a3942;
+    background: #0b141a;
+    color: #d1d7db;
+    padding: 9px 10px;
+    font-size: 13px;
+    outline: none;
+}
+
+.wa-tag-filter-search:focus {
+    border-color: #00a884;
+    box-shadow: 0 0 0 2px rgba(0, 168, 132, 0.12);
+}
+
+.wa-tag-filter-options {
+    max-height: 260px;
+    overflow: auto;
+    padding: 8px;
+}
+
+.wa-tag-filter-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 10px;
+    border-radius: 10px;
+    color: #d1d7db;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    font-size: 13px;
+}
+
+.wa-tag-filter-option:hover,
+.wa-tag-filter-option.active {
+    background: rgba(0, 168, 132, 0.14);
+}
+
+.wa-tag-filter-option-check {
+    color: #00a884;
+    font-weight: 700;
+}
+
+.wa-tag-filter-empty {
+    padding: 12px 10px;
+    color: #8696a0;
+    font-size: 12px;
+    text-align: center;
+}
+
 /* CSW dot in contact list */
 .wa-time-csw {
     display: flex;
@@ -720,6 +824,63 @@
     color: #e9edef;
     font-size: 14.2px;
     line-height: 19px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.wa-attachment-thumb-link {
+    display: block;
+    width: min(280px, 55vw);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 4px;
+    position: relative;
+    text-decoration: none;
+}
+
+.wa-attachment-thumb {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 280px;
+    object-fit: cover;
+    background: #0b141a;
+}
+
+.wa-attachment-video-link .wa-attachment-video {
+    background: #000;
+}
+
+.wa-attachment-play {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    font-size: 13px;
+}
+
+.wa-attachment-file {
+    display: inline-block;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #e9edef;
+    text-decoration: none;
+    margin-bottom: 4px;
+    max-width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.wa-message-caption {
+    margin-top: 2px;
     white-space: pre-wrap;
     word-break: break-word;
 }

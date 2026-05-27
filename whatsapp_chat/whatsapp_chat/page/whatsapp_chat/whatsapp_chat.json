@@ -1,10 +1,10 @@
 {
  "content": null,
- "creation": "2026-03-06 16:05:02.776179",
+ "creation": "2026-04-20 23:59:13.987449",
  "docstatus": 0,
  "doctype": "Page",
  "idx": 0,
- "modified": "2026-03-09 20:00:00.000000",
+ "modified": "2026-04-21 01:22:19.231642",
  "modified_by": "Administrator",
  "module": "WhatsApp Chat",
  "name": "whatsapp-chat",
@@ -13,15 +13,6 @@
  "roles": [
   {
    "role": "System Manager"
-  },
-  {
-   "role": "Sales User"
-  },
-  {
-   "role": "Sales Manager"
-  },
-  {
-   "role": "AI Chatbot"
   },
   {
    "role": "WhatsApp Chatbot"

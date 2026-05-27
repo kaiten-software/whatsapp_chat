@@ -4,7 +4,7 @@ app_publisher = "Kaiten Software"
 app_description = "WhatsApp-like chat interface for ERPNext CRM Leads"
 app_email = "hello@kaitensoftware.com"
 app_license = "MIT"
-app_version = "0.0.1"
+app_version = "0.0.2"
 
 # Document Events
 doc_events = {

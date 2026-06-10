@@ -26,10 +26,9 @@ website_route_rules = []
 # Fixtures
 # Export DocType definitions and the desk Page so they can be re-used (e.g. in ai_chat)
 fixtures = [
-    {
-        "doctype": "DocType",
-        "filters": [["name", "in", ["WhatsApp Template", "WhatsApp Settings", "Lead Message Log"]]],
-    },
+    
+    {"dt": "DocType", "filters": [["module", "=", "WhatsApp Chat"]]},
+    {"dt": "Custom Field", "filters": [["module", "=", "WhatsApp Chat"]]},
     {
         "doctype": "Page",
         # Actual page name uses a dash; keep filter aligned so export works

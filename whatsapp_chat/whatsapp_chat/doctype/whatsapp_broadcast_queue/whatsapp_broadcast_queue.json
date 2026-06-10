@@ -1,0 +1,142 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-04-20 16:01:01.090976",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "party",
+  "dynamic_link_uzxz",
+  "reference_doctype",
+  "reference_document",
+  "message_section",
+  "message",
+  "custom_events",
+  "custom_variables",
+  "status_section",
+  "retry_count",
+  "twilio_message_sid",
+  "error_log",
+  "twilio_response",
+  "delivery_timestamp",
+  "description"
+ ],
+ "fields": [
+  {
+   "fieldname": "party",
+   "fieldtype": "Select",
+   "label": "Party Type",
+   "options": "Lead\nContact\nUser\nCustomer\nSupplier"
+  },
+  {
+   "fieldname": "dynamic_link_uzxz",
+   "fieldtype": "Dynamic Link",
+   "label": "Party",
+   "options": "party"
+  },
+  {
+   "fieldname": "reference_doctype",
+   "fieldtype": "Link",
+   "label": "Reference DocType",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "reference_document",
+   "fieldtype": "Dynamic Link",
+   "label": "Reference Document",
+   "options": "reference_doctype"
+  },
+  {
+   "fieldname": "message_section",
+   "fieldtype": "Section Break",
+   "label": "Message"
+  },
+  {
+   "fieldname": "message",
+   "fieldtype": "Small Text",
+   "label": "Message Preview"
+  },
+  {
+   "fieldname": "custom_events",
+   "fieldtype": "Table",
+   "label": "Events",
+   "options": "Whatsapp Events Child Tables"
+  },
+  {
+   "fieldname": "custom_variables",
+   "fieldtype": "Table",
+   "label": "Template Variables",
+   "options": "Whatsapp Variable Child Table"
+  },
+  {
+   "fieldname": "status_section",
+   "fieldtype": "Section Break",
+   "label": "Delivery Status"
+  },
+  {
+   "default": "0",
+   "fieldname": "retry_count",
+   "fieldtype": "Int",
+   "label": "Retry Count",
+   "read_only": 1
+  },
+  {
+   "fieldname": "twilio_message_sid",
+   "fieldtype": "Data",
+   "label": "Twilio Message SID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "error_log",
+   "fieldtype": "Code",
+   "label": "Error Log",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "twilio_response",
+   "fieldtype": "Code",
+   "label": "Twilio Response",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "delivery_timestamp",
+   "fieldtype": "Datetime",
+   "label": "Delivery Timestamp",
+   "read_only": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-06-09 11:17:43.671688",
+ "modified_by": "Administrator",
+ "module": "WhatsApp Chat",
+ "name": "Whatsapp Broadcast Queue",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

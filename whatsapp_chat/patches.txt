@@ -1,0 +1,4 @@
+[pre_model_sync]
+
+[post_model_sync]
+whatsapp_chat.patches.remove_wbq_duplicate_custom_fields

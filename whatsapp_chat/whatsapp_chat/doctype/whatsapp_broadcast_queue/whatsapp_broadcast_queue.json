@@ -58,9 +58,9 @@
   },
   {
    "fieldname": "custom_events",
-   "fieldtype": "Table",
+   "fieldtype": "Link",
    "label": "Events",
-   "options": "Whatsapp Events Child Tables"
+   "options": "App Message Events"
   },
   {
    "fieldname": "custom_variables",

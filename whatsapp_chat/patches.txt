@@ -2,5 +2,4 @@
 
 [post_model_sync]
 whatsapp_chat.patches.remove_wbq_duplicate_custom_fields
-whatsapp_chat.patches.change_wbq_custom_events_to_link.
-execute
+whatsapp_chat.patches.change_wbq_custom_events_to_link

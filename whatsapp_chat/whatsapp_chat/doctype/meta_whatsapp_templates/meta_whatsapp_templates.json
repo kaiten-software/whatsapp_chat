@@ -51,7 +51,7 @@
   },
   {
    "fieldname": "message_id",
-   "fieldtype": "Password",
+   "fieldtype": "Data",
    "label": "Message ID"
   },
   {

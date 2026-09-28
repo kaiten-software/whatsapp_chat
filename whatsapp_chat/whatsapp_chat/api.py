@@ -900,19 +900,23 @@ def handle_lead_update(doc, method):
     if getattr(doc.flags, "from_whatsapp_chat", False):
         return
 
-    if doc.custom_message_log:
-        latest = doc.custom_message_log[-1]
-        frappe.publish_realtime(
-            "whatsapp_message",
-            {
-                "lead": doc.name,
-                "lead_name": doc.lead_name,
-                "message": latest.message,
-                "message_from": latest.message_from,
-                "timestamp": str(latest.message_origin_time) if latest.message_origin_time else "",
-                "status": latest.status,
-            },
-        )
+    # Field may be missing until migrate/fixtures sync; never crash Lead save.
+    message_log = doc.get("custom_message_log")
+    if not message_log:
+        return
+
+    latest = message_log[-1]
+    frappe.publish_realtime(
+        "whatsapp_message",
+        {
+            "lead": doc.name,
+            "lead_name": doc.lead_name,
+            "message": latest.message,
+            "message_from": latest.message_from,
+            "timestamp": str(latest.message_origin_time) if latest.message_origin_time else "",
+            "status": latest.status,
+        },
+    )
 
 
 # ═══════════════════════════════════════════════════════════════════════

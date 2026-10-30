@@ -13,9 +13,8 @@
   "twilio_section",
   "twilio_account_sid",
   "twilio_auth_token",
-  "column_break_twilio",
-  "twilio_whatsapp_number",
   "country_section",
+  "twilio_whatsapp_number",
   "default_country_code"
  ],
  "fields": [
@@ -79,21 +78,17 @@
    "mandatory_depends_on": "eval:!doc.provider || doc.provider_type=='Twilio'"
   },
   {
-   "fieldname": "column_break_twilio",
-   "fieldtype": "Column Break"
-  },
-  {
-   "description": "Your Twilio WhatsApp-enabled sender number in E.164 format (e.g. +14155238886)",
-   "fieldname": "twilio_whatsapp_number",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Twilio WhatsApp Number",
-   "mandatory_depends_on": "eval:!doc.provider || doc.provider_type=='Twilio'"
-  },
-  {
    "fieldname": "country_section",
    "fieldtype": "Section Break",
    "label": "Number Format"
+  },
+  {
+   "description": "Sender number in E.164 format (e.g. +14155238886)",
+   "fieldname": "twilio_whatsapp_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "WhatsApp Number",
+   "mandatory_depends_on": "eval:!doc.provider || doc.provider_type=='Twilio' || doc.provider_type=='Webhook'"
   },
   {
    "default": "+91",

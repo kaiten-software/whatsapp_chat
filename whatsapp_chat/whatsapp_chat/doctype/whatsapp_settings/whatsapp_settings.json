@@ -4,15 +4,62 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "provider_section",
+  "provider",
+  "provider_type",
+  "column_break_provider",
+  "provider_url",
+  "api_key",
   "twilio_section",
   "twilio_account_sid",
   "twilio_auth_token",
   "column_break_twilio",
   "twilio_whatsapp_number",
+  "country_section",
   "default_country_code"
  ],
  "fields": [
   {
+   "fieldname": "provider_section",
+   "fieldtype": "Section Break",
+   "label": "Provider"
+  },
+  {
+   "fieldname": "provider",
+   "fieldtype": "Link",
+   "label": "Provider",
+   "options": "WhatsApp Provider"
+  },
+  {
+   "fetch_from": "provider.provider_type",
+   "fieldname": "provider_type",
+   "fieldtype": "Data",
+   "label": "Provider Type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_provider",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.provider",
+   "fetch_from": "provider.provider_url",
+   "fieldname": "provider_url",
+   "fieldtype": "Data",
+   "label": "Provider URL",
+   "options": "URL",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.provider",
+   "fetch_from": "provider.api_key",
+   "fieldname": "api_key",
+   "fieldtype": "Password",
+   "label": "API Key",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:!doc.provider || doc.provider_type=='Twilio'",
    "fieldname": "twilio_section",
    "fieldtype": "Section Break",
    "label": "Twilio Configuration"
@@ -22,14 +69,14 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Twilio Account SID",
-   "reqd": 1
+   "mandatory_depends_on": "eval:!doc.provider || doc.provider_type=='Twilio'"
   },
   {
    "fieldname": "twilio_auth_token",
    "fieldtype": "Password",
    "in_list_view": 1,
    "label": "Twilio Auth Token",
-   "reqd": 1
+   "mandatory_depends_on": "eval:!doc.provider || doc.provider_type=='Twilio'"
   },
   {
    "fieldname": "column_break_twilio",
@@ -41,7 +88,12 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Twilio WhatsApp Number",
-   "reqd": 1
+   "mandatory_depends_on": "eval:!doc.provider || doc.provider_type=='Twilio'"
+  },
+  {
+   "fieldname": "country_section",
+   "fieldtype": "Section Break",
+   "label": "Number Format"
   },
   {
    "default": "+91",
@@ -53,7 +105,7 @@
  ],
  "issingle": 1,
  "links": [],
- "modified": "2026-03-07 15:25:12.518393",
+ "modified": "2026-10-30 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "WhatsApp Chat",
  "name": "WhatsApp Settings",

@@ -7,20 +7,29 @@
  "engine": "InnoDB",
  "field_order": [
   "provider",
+  "provider_type",
   "message_type",
   "short_name",
   "description",
   "column_break_lblc",
   "content",
   "message_id",
+  "provider_template_id",
   "status"
  ],
  "fields": [
   {
    "fieldname": "provider",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "label": "Provider",
-   "options": "Twillio"
+   "options": "WhatsApp Provider"
+  },
+  {
+   "fetch_from": "provider.provider_type",
+   "fieldname": "provider_type",
+   "fieldtype": "Data",
+   "label": "Provider Type",
+   "read_only": 1
   },
   {
    "fieldname": "message_type",
@@ -50,9 +59,18 @@
    "label": "Content"
   },
   {
+   "depends_on": "eval:!doc.provider_type || doc.provider_type=='Twilio'",
+   "description": "Twilio template number. It starts with HX.",
    "fieldname": "message_id",
    "fieldtype": "Data",
    "label": "Message ID"
+  },
+  {
+   "depends_on": "eval:!doc.provider_type || doc.provider_type=='Webhook'",
+   "description": "CRM template id (k_...). Used when the provider type is Webhook.",
+   "fieldname": "provider_template_id",
+   "fieldtype": "Data",
+   "label": "Provider Template ID"
   },
   {
    "fieldname": "status",
